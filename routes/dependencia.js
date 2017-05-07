@@ -21,7 +21,7 @@ router.get('/dependencias', function(req, res, next) {
 })
 
 //POST - Agregar dependencia
-router.post('/dependencia', middleware.ensureAuthorized, function(req, res, next) {
+router.post('/dependencia', function(req, res, next) {
     var dependencia = new Dependencia(req.body);
 
     dependencia.save(function(err, dependencia) {

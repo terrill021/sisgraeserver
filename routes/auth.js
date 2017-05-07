@@ -7,6 +7,9 @@ var serv = require('../settings/service');
 var middleware = require('../settings/middleware');
 
 router.post('/registrar', function(req, res) {
+
+    console.log('Registrar usuario');
+
     var params = {
         $or: [{cc_usuario: req.body.cc_usuario}, 
             {correo_usuario: req.body.correo_usuario}
@@ -16,7 +19,7 @@ router.post('/registrar', function(req, res) {
 
     Usuario.findOne(params, function(err, user) {
         if (err) {
-            res.send({error:true, message:'Oops, Ocurrió un error.'});
+            res.json({error:true, message:'Oops, Ocurrió un error.'});
         }
 
         if (!user) {
@@ -35,7 +38,7 @@ router.post('/registrar', function(req, res) {
 
             user.save(function(err) {
                 if (err) {
-                    res.send({error:true, message:'Ocurrió un error.'});    
+                    res.json({error:true, message:'Ocurrió un error. No se pudo crear el usuario.'});    
                 }
 
                 mensaje.tipo = 'registrarUsuario';
@@ -51,10 +54,10 @@ router.post('/registrar', function(req, res) {
                                 + 'Por su seguridad le recomendamos cambiar la contraseña, recuerde que su usuario también puede ser el<br> documento de identidad registrado.';
                 serv.enviarMensaje(mensaje);
 
-                res.send({error: false, message:'Usuario registrado con éxito.'});
+                res.json({error: false, message:'Usuario registrado con éxito.'});
             });
         } else {
-            res.send({error: true, message:'Usuario registrado anteriormente.'});
+            res.json({error: true, message:'Usuario registrado anteriormente.'});
         }
     });
 });
@@ -69,14 +72,14 @@ router.post('/login', function(req, res, next) {
     // find the user
     Usuario.findOne(search, function(err, user) {
         if (err) {
-            res.send({error:true, message:'Oops, Ocurrió un error.'});
+            res.json({error:true, message:'Oops, Ocurrió un error.'});
         }
         
         if (!user) {
-            res.send({error:true, message:'Usuario no encontrado.'});
+            res.json({error:true, message:'Usuario no encontrado.'});
         } else if (user) {
             if (user.estado == false) {
-                res.send({ error: true, message: 'Este usuario está deshabilitado, comuníquese con el administrador del sistema.'});
+                res.json({ error: true, message: 'Este usuario está deshabilitado, comuníquese con el administrador del sistema.'});
             } else {
                 var contEncriptada = serv.encriptar(user.correo_usuario, req.body.clave_usuario);
             
@@ -86,15 +89,15 @@ router.post('/login', function(req, res, next) {
                     user.pb_token = req.body.pb_token;
                     user.save(function(err) {
                         if (err) {
-                            res.send({error:true, message:'Ocurrió un error.', err: err});    
+                            res.json({error:true, message:'Ocurrió un error.', err: err});    
                         }
                     });
 
                     var token = serv.crearToken(user);
 
-                    res.send({ error: false, message:'Autenticación exitosa.', token: token, usuario: user });
+                    res.json({ error: false, message:'Autenticación exitosa.', token: token, usuario: user });
                 } else {                
-                    res.send({error: true, message: 'La contraseña no es correcta.'});
+                    res.json({error: true, message: 'La contraseña no es correcta.'});
                 }
             }
         }
@@ -115,11 +118,11 @@ router.post('/recuperar-clave', function(req, res, next) {
 
     Usuario.findOne(filtro, function(err, user) {
         if (err) {
-            res.send({error:true, message:'Oops, Ocurrió un error.'});
+            res.localhost({error:true, message:'Oops, Ocurrió un error.'});
         }
 
         if (!user) {
-            res.send({error: true, message: 'Usuario no está registrado.'});
+            res.json({error: true, message: 'Usuario no está registrado.'});
         } else if (user) {            
             var token = serv.passwordToken(user);
             mensaje.tipo = 'recuperarPass';
@@ -144,17 +147,17 @@ router.post('/recuperar-clave', function(req, res, next) {
 router.put('/usuario/:id/reset_token/:token', middleware.validatePassToken, function(req, res) {
     Usuario.findById(req.params.id, function(err, usuario) {
         if (err) {
-            res.send({error:true, message:'Oops, Ocurrió un error.'});
+            res.json({error:true, message:'Oops, Ocurrió un error.'});
         }
 
         if (!usuario) {
-            res.send({error: true, message: 'Usuario no está registrado.'});
+            res.json({error: true, message: 'Usuario no está registrado.'});
         } else {
             usuario.clave_usuario = serv.encriptar(usuario.correo_usuario, req.body.clave_usuario);
 
             usuario.save(function(err) {
                 if (err) {
-                    res.send(err);
+                    res.json({error: true, message: "No se pudo restablecer contraseña"});
                 }
                 
                 res.json({error: false, message: 'La contraseña ha sido cambiada con éxito.'});

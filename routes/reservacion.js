@@ -10,10 +10,6 @@ var middleware = require('../settings/middleware');
 var serv = require('../settings/service');
 var config = require('../settings/config');
 
-/* GET reservaciones listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
 
 //GET - Listar reservaciones
 router.get('/reservaciones', middleware.ensureAuthorized, function(req, res, next) {
@@ -21,7 +17,6 @@ router.get('/reservaciones', middleware.ensureAuthorized, function(req, res, nex
         if (err) {
             return next(err);
         }
-
         res.json(reservacion);
     })
     .populate('usuario')
@@ -57,7 +52,7 @@ router.get('/horarios/disponibles', middleware.ensureAuthorized, function(req, r
 
     Reservacion.find(search, function(err, reservacion) {
         if (err) {
-            return next(err);
+            res.json({error: false, message: 'Error iterno.', horario: horario_l});
         }
 
         if (reservacion.length > 0) {
@@ -91,7 +86,7 @@ router.get('/horarios/disponibles', middleware.ensureAuthorized, function(req, r
         	var horario_l = [];
         	Sala.findById(req.query.sala, function(err, sala) {
         		if (err) {
-		            res.send({error:true, message:'Oops, Ocurrió un error.', err: err});
+		            res.json({error:true, message:'Oops, Ocurrió un error.', err: err});
 		        }
 
 		        if (!sala) {
@@ -189,7 +184,7 @@ router.post('/reservacion', middleware.ensureAuthorized, function(req, res, next
                     serv.sendPush("Reservación realizada con éxito. Le quedan " + usuario.max_res_pend + " reservación(es) pendiente(s).", usuario.pb_token, function (){});
                 });
 
-		    	res.send({error:false, message:'Reservación registrada con éxito.', reservacion: reservacion});
+		    	res.json({error:false, message:'Reservación registrada con éxito.', reservacion: reservacion});
 		    });
         }        
     })
@@ -197,6 +192,9 @@ router.post('/reservacion', middleware.ensureAuthorized, function(req, res, next
 
 //PUT - Actualizar reservaciones
 router.put('/reservacion/:id', middleware.ensureAuthorized, function(req, res) {
+
+    var mensaje = {};
+
     Reservacion.findById(req.params.id, function(err, reservacion) {
         reservacion.fecha_reservacion = req.body.reservacion.requestdata.fecha;
     	reservacion.usuario = req.body.usuario;
@@ -212,7 +210,7 @@ router.put('/reservacion/:id', middleware.ensureAuthorized, function(req, res) {
 
         reservacion.save(function(err) {
             if (err) {
-                res.send(err);
+                res.json({error: true, message:"Error interno. No se pudieron actualizar los datos de usuario."});
             }
             
             res.json({error: false, message: 'La reservación se ha actualizado.', reservacion: reservacion});
@@ -232,9 +230,10 @@ router.put('/reservacion/:id/estado', middleware.ensureAuthorized, function(req,
 
         reservacion.save(function(err) {
             if (err) {
-                res.send(err);
+                res.json({err:true, message: "Error interno. No se pudo actualizar el estado"});
             }
 
+            //Si la reservación es incunplida
             if (reservacion.estado == 'Incumplida') {
                 Usuario.findById(reservacion.usuario, function(err, usuario) { 
                     usuario.fecha_act_registro = new Date();
@@ -246,6 +245,7 @@ router.put('/reservacion/:id/estado', middleware.ensureAuthorized, function(req,
 
                     usuario.save(function(err) {
                         if (err) {
+                            res.json({error: true, message:"Error interno. No se pudieron actualizar los datos de usuario."});
                         }
                     })
 
@@ -257,6 +257,7 @@ router.put('/reservacion/:id/estado', middleware.ensureAuthorized, function(req,
                     
                     sancion.save(function(err) {
                         if (err) {
+                            res.json({error: true, message:"Error interno. No se pudo generar sanción al usuario."});
                         }
 
                         mensaje.tipo = 'registrarSancion';
@@ -271,11 +272,11 @@ router.put('/reservacion/:id/estado', middleware.ensureAuthorized, function(req,
                         if (usuario.max_reservaciones == 0) {
                             mensaje.cuerpo += 'De ahora en adelante no podrá realizar reservaciones durante 15 días hábiles y deberá <br>estar al día con los entregables.';
                             //Notificar PUSH al cliente
-                            serv.sendPush("Usted ha sido sancionado durante 15 días hábiles. Revisar las políticas del Cieducar.", req.client.pushToken, callback);
+                            serv.sendPush("Usted ha sido sancionado durante 15 días hábiles. Revisar las políticas del Cieducar.", req.client.pushToken, function(){});
                         } else {
                             mensaje.cuerpo += 'De ahora en adelante solo podrá realizar máximo ' + usuario.max_reservaciones + ' reservación(es).';
                             //Notificar PUSH al cliente
-                            serv.sendPush("Solo podrá realizar máximo " + usuario.max_reservaciones + " reservación(es).", req.client.pushToken, callback);
+                            serv.sendPush("Solo podrá realizar máximo " + usuario.max_reservaciones + " reservación(es).", req.client.pushToken,  function(){});
                         }
 
                         serv.enviarMensaje(mensaje);
@@ -294,6 +295,7 @@ router.put('/reservacion/:id/estado', middleware.ensureAuthorized, function(req,
                    
                     usuario.save(function(err) {
                         if (err) {
+                            res.json({error: true, message:"Error interno. No se pudieron actualizar los datos de usuario."})
                         }
                     })
                 });
@@ -308,7 +310,7 @@ router.put('/reservacion/:id/estado', middleware.ensureAuthorized, function(req,
 router.delete('/reservacion/:id', middleware.ensureAuthorized, function(req, res){
     Reservacion.findByIdAndRemove(req.params.id, function(err){
         if (err) {
-            res.send(err)
+            res.json({error: true, message:"No se puede eliminar la resevación"})
         }
         
         res.json({message: 'La reservación se ha eliminado.'});

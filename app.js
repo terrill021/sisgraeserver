@@ -42,17 +42,17 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+//app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(cookieParser());
+//app.use(express.static(path.join(__dirname, 'public')));
 
 //Dominios Cruzados
-app.all('*', middleware.dominiosCruzados);
+//app.all('*', middleware.dominiosCruzados);
 
 //Generar Rutas
-app.use('/', routes);
+//app.use('/', routes);
 app.use('/auth', auth);
 app.use('/app', reserva, sala, horario, dependencia, actividad, usuario, sancion);
 
