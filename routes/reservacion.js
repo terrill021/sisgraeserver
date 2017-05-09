@@ -167,7 +167,7 @@ router.post('/reservacion', middleware.ensureAuthorized, function(req, res, next
                                     + 'Cartagena ' + usuario.fecha_act_registro + '<br>'
                                     + 'Sres. Cieducar' + '<br><br>'
                                     + 'Yo ' + usuario.nombre_usuario + ' ' + usuario.apellido_usuario + ', solicito el préstamo de un ambiente de aprendizaje <br>'
-                                    + 'para realizar la actividad de ' + reservacion.actividad + ', que realizaré el ' + reservación.fecha_reservacion + ' en el(los) horario(s) de: <br><br>'
+                                    + 'para realizar la actividad de ' + reservacion.actividad + ', que realizaré el ' + reservacion.fecha_reservacion + ' en el(los) horario(s) de: <br><br>'
                                     + reservacion.horario + '<br><br>'
                                     + 'Descripción<br>'
                                     + reservacion.descripcion + '<br><br>'
@@ -192,6 +192,8 @@ router.post('/reservacion', middleware.ensureAuthorized, function(req, res, next
 
 //PUT - Actualizar reservaciones
 router.put('/reservacion/:id', middleware.ensureAuthorized, function(req, res) {
+
+console.log('reservacion/:id');
 
     var mensaje = {};
 
@@ -220,6 +222,9 @@ router.put('/reservacion/:id', middleware.ensureAuthorized, function(req, res) {
 
 //PUT - Actualizar estado
 router.put('/reservacion/:id/estado', middleware.ensureAuthorized, function(req, res, next) {
+
+    console.log('/reservacion/:id/estado');
+
     var mensaje = {};
 
     Reservacion.findById(req.params.id, function(err, reservacion) {
@@ -286,7 +291,7 @@ router.put('/reservacion/:id/estado', middleware.ensureAuthorized, function(req,
                 Usuario.findById(reservacion.usuario, function(err, usuario) { 
                     usuario.fecha_act_registro = new Date();
 
-                    if (usuario.max_reservaciones < config.reservas)  {
+                    if (usuario.max_reservaciones < usuario.reservas)  {
                         usuario.max_res_pend++;
                     }
 
