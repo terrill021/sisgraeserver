@@ -117,7 +117,11 @@ router.get('/horarios/disponibles', middleware.ensureAuthorized, function(req, r
 
 //POST - Agregar reservaciones
 router.post('/reservacion', middleware.ensureAuthorized, function(req, res, next) {
-	var mensaje = {};
+	
+console.log(req.body)
+
+
+    var mensaje = {};
     var search = {
 		fecha_reservacion: req.body.reservacion.requestdata.fecha,
 		sala: req.body.reservacion.requestdata.sala,
@@ -126,8 +130,21 @@ router.post('/reservacion', middleware.ensureAuthorized, function(req, res, next
 
     Reservacion.find(search, function(err, reservacion) {
         if (err) {
-            return next(err);
+            res.json({error: true, message:"No se pudo guardar "})
         }
+
+        //validar que el usuario puede registrar
+        Usuario.findById({_id : req.body.usuario}, function(err, usuario){
+            if(err){
+                res.json({error : true});
+            }
+             //Si no le quedan reservaciones
+            if (usuario.max_res_pend == 0) {
+                res.json({error : true, message : "Llegastes a tu limite de reservaciones, no puedes crear una nueva reservación."});
+                return;
+            }
+
+        })
 
         if (reservacion.length > 0) {
         	res.json({error: true, message:'El horario seleccionado no se encuentra disponible.', reservacion: reservacion});
@@ -146,15 +163,18 @@ router.post('/reservacion', middleware.ensureAuthorized, function(req, res, next
 
 			reservacion.save(function(err, reservacion) {
 				if (err) {
-					return next(err);
+					res.json({error: true, message:"No se pudo guardar "})
 				}
 
                 Usuario.findById(reservacion.usuario, function(err, usuario) { 
                     usuario.fecha_act_registro = new Date();
 
+                    //Si el usuario le quedan reservaciones por hacer-
                     if (usuario.max_res_pend > 0)  {
                         usuario.max_res_pend--;
                     }
+
+                   
 
                     //Enviar correo electrónico
                     mensaje.tipo = 'registrarReserva';
@@ -177,14 +197,16 @@ router.post('/reservacion', middleware.ensureAuthorized, function(req, res, next
 
                     usuario.save(function(err) {
                         if (err) {
+                            res.json({error : true, message : "Error actualizando la información del usuario."})
                         }
                     })
 
                     //Notificar PUSH al cliente
                     serv.sendPush("Reservación realizada con éxito. Le quedan " + usuario.max_res_pend + " reservación(es) pendiente(s).", usuario.pb_token, function (){});
+                   // res.json({error:false, message:'Reservación registrada con éxito.', reservacion: reservacion});
                 });
 
-		    	res.json({error:false, message:'Reservación registrada con éxito.', reservacion: reservacion});
+		    //	
 		    });
         }        
     })
