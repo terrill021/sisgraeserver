@@ -118,99 +118,106 @@ router.get('/horarios/disponibles', middleware.ensureAuthorized, function(req, r
 //POST - Agregar reservaciones
 router.post('/reservacion', middleware.ensureAuthorized, function(req, res, next) {
 	
-console.log(req.body)
+    console.log("Agregar reservacion");
 
-
-    var mensaje = {};
-    var search = {
-		fecha_reservacion: req.body.reservacion.requestdata.fecha,
-		sala: req.body.reservacion.requestdata.sala,
-		horario: {$in: req.body.reservacion.requestdata.horarios}
-	};
-
-    Reservacion.find(search, function(err, reservacion) {
-        if (err) {
-            res.json({error: true, message:"No se pudo guardar "})
+    Usuario.findById({_id : req.body.usuario}, function(err, usuario) {
+        if(err){
+            res.json({error : true});
         }
+        
+        //Si no le quedan reservaciones        
+        if (usuario.max_res_pend == usuario.max_reservaciones) {
+            res.json({error : true, message : "As alcanzado el numero máximo de reservaciones que puedes realizar."})
+        }
+        else{            
+            //
+            var mensaje = {};
+            var search = {
+                fecha_reservacion: req.body.reservacion.requestdata.fecha,
+                sala: req.body.reservacion.requestdata.sala,
+                horario: {$in: req.body.reservacion.requestdata.horarios}
+            };
 
-        //validar que el usuario puede registrar
-        Usuario.findById({_id : req.body.usuario}, function(err, usuario){
-            if(err){
-                res.json({error : true});
-            }
-             //Si no le quedan reservaciones
-            if (usuario.max_res_pend == 0) {
-                res.json({error : true, message : "Llegastes a tu limite de reservaciones, no puedes crear una nueva reservación."});
-                return;
-            }
+            Reservacion.find(search, function(err, reservacion) {
 
-        })
+                if (err) {
+                    res.json({error: true, message:"No se pudo guardar."})
+                }
 
-        if (reservacion.length > 0) {
-        	res.json({error: true, message:'El horario seleccionado no se encuentra disponible.', reservacion: reservacion});
-        } else {
-        	var reservacion = new Reservacion();
+                if (reservacion.length > 0) {
+                    res.json({error: true, message:'El horario seleccionado no se encuentra disponible.', reservacion: reservacion});
+                }
+                else {
+                var reservacion = new Reservacion();
 
-        	reservacion.fecha_reservacion = req.body.reservacion.requestdata.fecha;
-        	reservacion.usuario = req.body.usuario;
-			reservacion.sala = req.body.reservacion.requestdata.sala;
-			reservacion.horario = req.body.reservacion.requestdata.horarios;
-			reservacion.dependencia = req.body.reservacion.actividad.dependencia;
-			reservacion.cantidad_asistentes = req.body.reservacion.actividad.asistentes;
-			reservacion.numero_equipos = req.body.reservacion.actividad.equipos;
-			reservacion.actividad = req.body.reservacion.actividad.actividad;
-			reservacion.descripcion = req.body.reservacion.actividad.descripcion;
+                reservacion.fecha_reservacion = req.body.reservacion.requestdata.fecha;
+                reservacion.usuario = req.body.usuario;
+                reservacion.sala = req.body.reservacion.requestdata.sala;
+                reservacion.horario = req.body.reservacion.requestdata.horarios;
+                reservacion.dependencia = req.body.reservacion.actividad.dependencia;
+                reservacion.cantidad_asistentes = req.body.reservacion.actividad.asistentes;
+                reservacion.numero_equipos = req.body.reservacion.actividad.equipos;
+                reservacion.actividad = req.body.reservacion.actividad.actividad;
+                reservacion.descripcion = req.body.reservacion.actividad.descripcion;
 
-			reservacion.save(function(err, reservacion) {
-				if (err) {
-					res.json({error: true, message:"No se pudo guardar "})
-				}
-
-                Usuario.findById(reservacion.usuario, function(err, usuario) { 
-                    usuario.fecha_act_registro = new Date();
-
-                    //Si el usuario le quedan reservaciones por hacer-
-                    if (usuario.max_res_pend > 0)  {
-                        usuario.max_res_pend--;
+                reservacion.save(function(err, reservacion) {
+                    if (err) {
+                        res.json({error: true, message:"No se pudo guardar "})
                     }
 
-                   
+                    Usuario.findById(reservacion.usuario, function(err, usuario) { 
+                        usuario.fecha_act_registro = new Date();
 
-                    //Enviar correo electrónico
-                    mensaje.tipo = 'registrarReserva';
-                    mensaje.nombre = usuario.nombre_usuario;
-                    mensaje.apellido = usuario.apellido_usuario;
-                    mensaje.to = '"' + mensaje.nombre + ' ' + mensaje.apellido + '" <' + usuario.correo_usuario + '>';
-                    mensaje.asunto = 'Reservación creada, SISGRAE - Cieducar';
-                    mensaje.cuerpo = 'Usted ha realizado una reservación en el Sistema de Gestión y Reservación de Ambientes Educativos de Cieducar. <br><br>'
-                                    + '<h3>Solicitud préstamo de salas</h3>'
-                                    + 'Cartagena ' + usuario.fecha_act_registro + '<br>'
-                                    + 'Sres. Cieducar' + '<br><br>'
-                                    + 'Yo ' + usuario.nombre_usuario + ' ' + usuario.apellido_usuario + ', solicito el préstamo de un ambiente de aprendizaje <br>'
-                                    + 'para realizar la actividad de ' + reservacion.actividad + ', que realizaré el ' + reservacion.fecha_reservacion + ' en el(los) horario(s) de: <br><br>'
-                                    + reservacion.horario + '<br><br>'
-                                    + 'Descripción<br>'
-                                    + reservacion.descripcion + '<br><br>'
-                                    + 'He declarado que acepto las condiciones, restricciones y políticas del Cieducar y la Universidad de Cartagena.'
+                        //Si el usuario le quedan reservaciones por hacer-
+                        usuario.max_res_pend++;
+                     
 
-                    serv.enviarMensaje(mensaje);
+                        //Enviar correo electrónico
+                        mensaje.tipo = 'registrarReserva';
+                        mensaje.nombre = usuario.nombre_usuario;
+                        mensaje.apellido = usuario.apellido_usuario;
+                        mensaje.to = '"' + mensaje.nombre + ' ' + mensaje.apellido + '" <' + usuario.correo_usuario + '>';
+                        mensaje.asunto = 'Reservación creada, SISGRAE - Cieducar';
+                        mensaje.cuerpo = 'Usted ha realizado una reservación en el Sistema de Gestión y Reservación de Ambientes Educativos de Cieducar. <br><br>'
+                                        + '<h3>Solicitud préstamo de salas</h3>'
+                                        + 'Cartagena ' + usuario.fecha_act_registro + '<br>'
+                                        + 'Sres. Cieducar' + '<br><br>'
+                                        + 'Yo ' + usuario.nombre_usuario + ' ' + usuario.apellido_usuario + ', solicito el préstamo de un ambiente de aprendizaje <br>'
+                                        + 'para realizar la actividad de ' + reservacion.actividad + ', que realizaré el ' + reservacion.fecha_reservacion + ' en el(los) horario(s) de: <br><br>'
+                                        + reservacion.horario + '<br><br>'
+                                        + 'Descripción<br>'
+                                        + reservacion.descripcion + '<br><br>'
+                                        + 'He declarado que acepto las condiciones, restricciones y políticas del Cieducar y la Universidad de Cartagena.'
 
-                    usuario.save(function(err) {
-                        if (err) {
-                            res.json({error : true, message : "Error actualizando la información del usuario."})
-                        }
-                    })
+                        serv.enviarMensaje(mensaje);
 
-                    //Notificar PUSH al cliente
-                    serv.sendPush("Reservación realizada con éxito. Le quedan " + usuario.max_res_pend + " reservación(es) pendiente(s).", usuario.pb_token, function (){});
-                   // res.json({error:false, message:'Reservación registrada con éxito.', reservacion: reservacion});
+                        usuario.save(function(err) {
+                            if (err) {
+                                res.json({error : true, message : "Error actualizando la información del usuario."});
+                            }
+                        })
+                        //Notificar PUSH al cliente
+                        serv.sendPush("Reservación realizada con éxito. Le quedan " + usuario.max_res_pend + " reservación(es) pendiente(s).", usuario.pb_token, function (){});
+                       // res.json({error:false, message:'Reservación registrada con éxito.', reservacion: reservacion});
+                    });
+                //  
+                res.json({error : false, message:"Reservación registrada con exito"});
                 });
+            } 
 
-		    //	
-		    });
-        }        
-    })
+
+            })
+        } 
+
+        
+    });
+
+    //
+
+   
 })
+
+
 
 //PUT - Actualizar reservaciones
 router.put('/reservacion/:id', middleware.ensureAuthorized, function(req, res) {
@@ -264,11 +271,15 @@ router.put('/reservacion/:id/estado', middleware.ensureAuthorized, function(req,
             if (reservacion.estado == 'Incumplida') {
                 Usuario.findById(reservacion.usuario, function(err, usuario) { 
                     usuario.fecha_act_registro = new Date();
+            
+                    //Se le quita una reservacion
+                    usuario.max_reservaciones--;
 
-                    if (usuario.max_reservaciones > 0)  {
-                        usuario.max_reservaciones--;
-                        usuario.max_res_pend--;
+                    //Se le cancela para que pueda hacer otra
+                    if (usuario.max_res_pend > 0) {
+                        usuario.max_res_pend --;
                     }
+                                         
 
                     usuario.save(function(err) {
                         if (err) {
@@ -312,13 +323,28 @@ router.put('/reservacion/:id/estado', middleware.ensureAuthorized, function(req,
             } else if (reservacion.estado == 'Cumplida' || reservacion.estado == 'Cancelada') {
                 Usuario.findById(reservacion.usuario, function(err, usuario) { 
                     usuario.fecha_act_registro = new Date();
+                   
+                    //Se le cancela para que pueda hacer otra
+                    if (usuario.max_res_pend > 0) {
+                        usuario.max_res_pend --;
+                    }                  
+                    if(reservacion.estado == 'Cancelada'){
+                        console.log("Cancelada")
+                        //enviar correo si cancela
+                        mensaje.tipo = 'NotificarCancelación';
+                        mensaje.nombre = usuario.nombre_usuario;
+                        mensaje.apellido = usuario.apellido_usuario;
+                        mensaje.to = '"' + mensaje.nombre + ' ' + mensaje.apellido + '" <' + usuario.correo_usuario + '>';
+                        mensaje.asunto = "Cancelación de reserva en SISGRAE";
+                        mensaje.cuerpo = 'Su reservación en el sistema de gestión y administración de ambientes educativos de CIeducar (SISGRAE) ha sido cancelada. Consulte la aplicación para verificar el estado de sus reservaciones. <br><br>'
+                            + '<b>Motivo:<b> ' + mensaje.asunto + '<br>'
+                            + '<b>Descripción: </b>' + "Te invitamos a usar responsablemente nuestros servicios, para que asi todos podamos tener acceso oportuno a ellos. Si tienes dudas puedes consultar nuestro reglamento desde SISGRAE" + '<br><br>';
 
-                    if (usuario.max_reservaciones < usuario.reservas)  {
-                        usuario.max_res_pend++;
-                    }
-
+                        //Notificar correo electronico 
+                        serv.enviarMensaje(mensaje);
+                    }   
                     //Noticación PUSH al cliente
-                    serv.sendPush("Le quedan " + usuario.max_res_pend + " reservación(es) pendiente(s).", usuario.pb_token, function (){});
+                    serv.sendPush("Le quedan " + usuario.max_res_pend + " reservación(es) disponibles(s).", usuario.pb_token, function (){});
                    
                     usuario.save(function(err) {
                         if (err) {
