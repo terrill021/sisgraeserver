@@ -1,8 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var mongoose = require('mongoose');
-var Horario = mongoose.model('Horario');
 var middleware = require('../settings/middleware');
+var horarios = require('../controllers/horarios');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -10,53 +9,15 @@ router.get('/', function(req, res, next) {
 });
 
 //GET - Listar horarios
-router.get('/horarios', middleware.ensureAuthorized, function(req, res, next) {
-    Horario.find(function(err, horario) {
-        if (err) {
-        	return next(err);
-        }
-
-        res.json(horario);
-    });
-})
+router.get('/horarios', middleware.ensureAuthorized, horarios.obtenerHorarios);
 
 //POST - Agregar horario
-router.post('/horario', middleware.ensureAuthorized, function(req, res, next) {
-    var horario = new Horario(req.body);
-
-    horario.save(function(err, horario) {
-		if (err) {
-			return next(err);
-		}
-
-    	res.json(horario);
-    });
-})
+router.post('/horario', middleware.ensureAuthorized, horarios.AgregarHorario);
 
 //PUT - Actualizar horario
-router.put('/horario/:id', middleware.ensureAuthorized, function(req, res) {
-    Horario.findById(req.params.id, function(err, horario) {
-	    horario.rango_hora = req.body.rango_hora;
-
-        horario.save(function(err) {
-            if (err) {
-            	res.send(err);
-            }
-            
-            res.json(horario);
-        });
-    })
-})
+router.put('/horario/:id', middleware.ensureAuthorized, horarios.actualizarHorario);
 
 //DELETE - Eliminar horario
-router.delete('/horario/:id', middleware.ensureAuthorized, function(req, res){
-    Horario.findByIdAndRemove(req.params.id, function(err) {
-        if (err) {
-        	res.send(err)
-        }
-        
-        res.json({message: 'La horario se ha eliminado.'});
-    })
-})
+router.delete('/horario/:id', middleware.ensureAuthorized, horarios.elimininarHorario);
 
 module.exports = router;

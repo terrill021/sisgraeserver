@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var mongoose = require('mongoose');
-var Actividad = mongoose.model('Actividad');
+
 var middleware = require('../settings/middleware');
+var actividades = require('../controllers/actividad');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -10,53 +10,15 @@ router.get('/', function(req, res, next) {
 });
 
 //GET - Listar actividades
-router.get('/actividades', middleware.ensureAuthorized, function(req, res, next) {
-    Actividad.find(function(err, actividad) {
-        if (err) {
-        	return next(err);
-        }
-
-        res.json(actividad);
-    });
-})
+router.get('/actividades', middleware.ensureAuthorized, actividades.obtenerActividades);
 
 //POST - Agregar actividad
-router.post('/actividad', middleware.ensureAuthorized, function(req, res, next) {
-    var actividad = new Actividad(req.body);
-
-    actividad.save(function(err, actividad) {
-		if (err) {
-			return next(err);
-		}
-
-    	res.json(actividad);
-    });
-})
+router.post('/actividad', middleware.ensureAuthorized, actividades.agregarActividad);
 
 //PUT - Actualizar actividad
-router.put('/actividad/:id', middleware.ensureAuthorized, function(req, res) {
-    Actividad.findById(req.params.id, function(err, actividad) {
-	    actividad.nombre_act = req.body.nombre_act;
-
-        actividad.save(function(err) {
-            if (err) {
-            	res.send(err);
-            }
-            
-            res.json(actividad);
-        });
-    })
-})
+router.put('/actividad/:id', middleware.ensureAuthorized, actividades.actualizarActividad);
 
 //DELETE - Eliminar actividad
-router.delete('/actividad/:id', middleware.ensureAuthorized, function(req, res){
-    Actividad.findByIdAndRemove(req.params.id, function(err) {
-        if (err) {
-        	res.send(err)
-        }
-        
-        res.json({error: false, message: 'La actividad se ha eliminado.'});
-    })
-})
+router.delete('/actividad/:id', middleware.ensureAuthorized, actividades.eliminarActividad);
 
 module.exports = router;
