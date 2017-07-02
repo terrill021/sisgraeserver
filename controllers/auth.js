@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
 var Usuario = mongoose.model('Usuario');
+var serv = require('../settings/service');
+
 
 
 exports.registrarUsuario = function(req, res) {
-
-    console.log('Registrar usuario');
 
     var params = {
         $or: [{cc_usuario: req.body.cc_usuario}, 
@@ -43,7 +43,7 @@ exports.registrarUsuario = function(req, res) {
                 mensaje.to = '"' + mensaje.nombre + ' ' + mensaje.apellido + '" <' + user.correo_usuario + '>';
                 mensaje.asunto = 'Registro de usuario';
                 mensaje.cuerpo = 'Usted ha sido registrado en el Sistema de Gestión y Reservación de Ambientes Educativos, <br>'
-                                + 'con ello acepta las condiciones, restricciones y políticas del CIeduca y la Universidad de Cartagena.<br>'
+                                + 'con ello acepta las condiciones, restricciones y políticas del CIeducar y la Universidad de Cartagena.<br>'
                                 + '<h3>Datos de ingreso</h3>'
                                 + '<b>Usuario: </b>' + user.correo_usuario + '<br>' 
                                 + '<b>Contraseña: </b>' + req.body.clave_usuario + '<br><br>'
@@ -59,9 +59,12 @@ exports.registrarUsuario = function(req, res) {
 }
 
 exports.iniciarSesion = function(req, res, next) {
+
+    console.log("iniciar sesion")
     if (!serv.validarMail(req.body.cc_usuario)) {
         var search = { cc_usuario: req.body.cc_usuario };
     } else {
+        console.log("es correo")
         var search = { correo_usuario: req.body.cc_usuario };
     }
     
@@ -72,8 +75,12 @@ exports.iniciarSesion = function(req, res, next) {
         }
         
         if (!user) {
+            console.log("no existe")
             res.json({error:true, message:'Usuario no encontrado.'});
         } else if (user) {
+                        console.log(" existe")
+
+            //Validar que usuario tenga estado activo
             if (user.estado == false) {
                 res.json({ error: true, message: 'Este usuario está deshabilitado, comuníquese con el administrador del sistema.'});
             } else {
@@ -127,7 +134,7 @@ exports.recuperarClave = function(req, res, next) {
                             + token + '" target="_blank">Cambiar mi contraseña</a><br><br>'
                                 + 'En caso de que usted no haya hecho la solicitud de cambio de contraseña, ignore este mensaje.<br><br>'
                             + 'Este enlace caduca minutos después de la hora de envío.<br>'
-                            + 'El enlace lo dirige a la página de restablecimiento de cuentas CIeduca.';
+                            + 'El enlace lo dirige a la página de restablecimiento de cuentas CIeducar.';
             serv.enviarMensaje(mensaje);
             res.json({error: false, message: 'Se ha enviado el enlace al correo electrónico con los instrucciones para recuperar la contraseña.'})
         }

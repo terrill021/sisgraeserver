@@ -9,7 +9,6 @@ exports.obtenerUsuarios = function(req, res, next) {
         if (err) {
             return next(err);
         }
-
         res.json(usuario);
     });
 }
@@ -40,7 +39,6 @@ exports.agregarUsuario = function(req, res, next) {
             user.clave_usuario = serv.encriptar(req.body.correo_usuario, req.body.clave_usuario);
             user.max_reservaciones = config.reservas;
             user.max_res_pend = config.reservas;
-            //user.pb_token = req.body.pb_token;
 
             user.save(function(err) {
                 if (err) {
@@ -57,7 +55,8 @@ exports.agregarUsuario = function(req, res, next) {
                                 + '<h3>Datos de ingreso</h3>'
                                 + '<b>Usuario: </b>' + user.correo_usuario + '<br>' 
                                 + '<b>Contraseña: </b>' + req.body.clave_usuario + '<br><br>'
-                                + 'Por su seguridad le recomendamos cambiar la contraseña, recuerde que su usuario también puede ser el<br> documento de identidad registrado.';
+                                + 'Por su seguridad le recomendamos cambiar la contraseña,',
+                                + 'recuerde que su usuario también puede ser el<br> documento de identidad registrado.';
                 serv.enviarMensaje(mensaje);
 
                 res.send({error: false, message:'Usuario registrado con éxito.'});

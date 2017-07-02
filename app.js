@@ -9,7 +9,10 @@ var config = require('./settings/config');
 var middleware = require('./settings/middleware');
 
 //Conexión a BD
-mongoose.connect(config.database);
+
+  mongoose.connect(config.database);
+
+
 
 //Importación de Modelos MongoDB
 require('./models/usuario');

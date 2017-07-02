@@ -81,7 +81,7 @@ exports.enviarMensaje = function(mensaje) {
 
 //Notificaciones PUSH
 exports.sendPush = function(message, registrationId, callback) {
-	console.log('Send push')
+	
 	var message = new gcm.Message({data: {tittle: "SISGRAE", message: message}});
 	var regTokens = [registrationId];
 	var sender = new gcm.Sender(senderId);
