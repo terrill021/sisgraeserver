@@ -14,6 +14,7 @@ exports.obtenerUsuarios = function(req, res, next) {
 }
 
 exports.agregarUsuario = function(req, res, next) {
+
     var params = {
         $or: [{cc_usuario: req.body.cc_usuario}, 
             {correo_usuario: req.body.correo_usuario}
@@ -37,8 +38,7 @@ exports.agregarUsuario = function(req, res, next) {
             user.dependencia = req.body.dependencia;
             user.dir_usuario = req.body.dir_usuario;
             user.clave_usuario = serv.encriptar(req.body.correo_usuario, req.body.clave_usuario);
-            user.max_reservaciones = config.reservas;
-            user.max_res_pend = config.reservas;
+           
 
             user.save(function(err) {
                 if (err) {

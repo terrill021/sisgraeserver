@@ -6,6 +6,8 @@ var serv = require('../settings/service');
 
 exports.registrarUsuario = function(req, res) {
 
+console.log(req.body)
+
     var params = {
         $or: [{cc_usuario: req.body.cc_usuario}, 
             {correo_usuario: req.body.correo_usuario}

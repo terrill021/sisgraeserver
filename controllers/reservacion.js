@@ -110,93 +110,107 @@ exports.obtenerHorariosDisponibles = function(req, res, next) {
 
 exports.agregarReservacion = function (req, res, next) {
 	
-		Usuario.findById({_id : req.body.usuario}, function(err, usuario) {
+        var usuario;
+		Usuario.findById({_id : req.body.usuario}, function(err, usuarioFound) {
 	        if(err){
-	            res.json({error : true});
-	        }
-	        
-	        //Si no le quedan reservaciones        
-	        if (usuario.max_res_pend == usuario.max_reservaciones) {
-	            res.json({error : true, message : "As alcanzado el numero máximo de reservaciones que puedes realizar."})
-	        }
-	        else{            
-	            //
-	            var mensaje = {};
-	            var search = {
-	                fecha_reservacion: req.body.reservacion.requestdata.fecha,
-	                sala: req.body.reservacion.requestdata.sala,
-	                horario: {$in: req.body.reservacion.requestdata.horarios}
-	            };
+	            res.json({error : true, message : "Error buscando usuario."});
+	        }else{
+                usuario = usuarioFound;
+                //si el usuario existe
+                if(usuario){
+                    //Si no le quedan reservaciones        
+                    if (usuario.max_res_pend == usuario.max_reservaciones) {
+                        res.json({error : true, message : "As alcanzado el numero máximo de reservaciones que puedes realizar."})
+                    }
+                    // Si le quedan reservaciones
+                    else {
+                        //
+                        var mensaje = {};
+                        var search = {
+                            fecha_reservacion: req.body.reservacion.requestdata.fecha,
+                            sala: req.body.reservacion.requestdata.sala,
+                            horario: {$in: req.body.reservacion.requestdata.horarios}
+                        };
 
-	            Reservacion.find(search, function(err, reservacion) {
+                        // Buscar reservaciones con horarios iguales
+                        Reservacion.find(search, function(err, reservacion) {
 
-	                if (err) {
-	                    res.json({error: true, message:"No se pudo guardar."})
-	                }
+                            if(err){
+                                res.json({error : true, message : "Error buscando reservaciones."});
+                            }
+                            //Validar que no haya bloque de horarios
+                            else if (reservacion && reservacion.length > 0) {
+                                res.json({error: true, message:'El horario seleccionado no se encuentra disponible.', reservacion: reservacion});
+                            }
+                            // Guardar la reservacion
+                            else {
+                                var reservacion = new Reservacion();
 
-	                if (reservacion.length > 0) {
-	                    res.json({error: true, message:'El horario seleccionado no se encuentra disponible.', reservacion: reservacion});
-	                }
-	                else {
-	                var reservacion = new Reservacion();
+                                reservacion.fecha_reservacion = req.body.reservacion.requestdata.fecha;
+                                reservacion.usuario = req.body.usuario;
+                                reservacion.sala = req.body.reservacion.requestdata.sala;
+                                reservacion.horario = req.body.reservacion.requestdata.horarios;
+                                reservacion.dependencia = req.body.reservacion.actividad.dependencia;
+                                reservacion.cantidad_asistentes = req.body.reservacion.actividad.asistentes;
+                                reservacion.numero_equipos = req.body.reservacion.actividad.equipos;
+                                reservacion.actividad = req.body.reservacion.actividad.actividad;
+                                reservacion.descripcion = req.body.reservacion.actividad.descripcion;
 
-	                reservacion.fecha_reservacion = req.body.reservacion.requestdata.fecha;
-	                reservacion.usuario = req.body.usuario;
-	                reservacion.sala = req.body.reservacion.requestdata.sala;
-	                reservacion.horario = req.body.reservacion.requestdata.horarios;
-	                reservacion.dependencia = req.body.reservacion.actividad.dependencia;
-	                reservacion.cantidad_asistentes = req.body.reservacion.actividad.asistentes;
-	                reservacion.numero_equipos = req.body.reservacion.actividad.equipos;
-	                reservacion.actividad = req.body.reservacion.actividad.actividad;
-	                reservacion.descripcion = req.body.reservacion.actividad.descripcion;
+                                reservacion.save(function(err, reservacion) {
 
-	                reservacion.save(function(err, reservacion) {
-	                    if (err) {
-	                        res.json({error: true, message:"No se pudo guardar "})
-	                    }
+                                    if(err){
+                                        res.json({error : true, message : "Error guardando reservación."});
+                                    }
+                                    // Notificar al usuario
 
-	                    Usuario.findById(reservacion.usuario, function(err, usuario) { 
-	                        usuario.fecha_act_registro = new Date();
+                                    usuario.fecha_act_registro = new Date();
 
-	                        //Si el usuario le quedan reservaciones por hacer-
-	                        usuario.max_res_pend++;
-	                     
+                                    //Aumentar el numero de reservaciones activas
+                                    usuario.max_res_pend++;
+                                 
+                                    //Enviar correo electrónico
+                                    mensaje.tipo = 'registrarReserva';
+                                    mensaje.nombre = usuario.nombre_usuario;
+                                    mensaje.apellido = usuario.apellido_usuario;
+                                    mensaje.to = '"' + mensaje.nombre + ' ' + mensaje.apellido + '" <' + usuario.correo_usuario + '>';
+                                    mensaje.asunto = 'Reservación creada, SISGRAE - Cieducar';
+                                    mensaje.cuerpo = 'Usted ha realizado una reservación en el Sistema de Gestión y Reservación de Ambientes Educativos de Cieducar. <br><br>'
+                                                    + '<h3>Solicitud préstamo de salas</h3>'
+                                                    + 'Cartagena ' + usuario.fecha_act_registro + '<br>'
+                                                    + 'Sres. Cieducar' + '<br><br>'
+                                                    + 'Yo ' + usuario.nombre_usuario + ' ' + usuario.apellido_usuario + ', solicito el préstamo de un ambiente de aprendizaje <br>'
+                                                    + 'para realizar la actividad de ' + reservacion.actividad + ', que realizaré el ' + reservacion.fecha_reservacion + ' en el(los) horario(s) de: <br><br>'
+                                                    + reservacion.horario + '<br><br>'
+                                                    + 'Descripción<br>'
+                                                    + reservacion.descripcion + '<br><br>'
+                                                    + 'He declarado que acepto las condiciones, restricciones y políticas del Cieducar y la Universidad de Cartagena.'
 
-	                        //Enviar correo electrónico
-	                        mensaje.tipo = 'registrarReserva';
-	                        mensaje.nombre = usuario.nombre_usuario;
-	                        mensaje.apellido = usuario.apellido_usuario;
-	                        mensaje.to = '"' + mensaje.nombre + ' ' + mensaje.apellido + '" <' + usuario.correo_usuario + '>';
-	                        mensaje.asunto = 'Reservación creada, SISGRAE - Cieducar';
-	                        mensaje.cuerpo = 'Usted ha realizado una reservación en el Sistema de Gestión y Reservación de Ambientes Educativos de Cieducar. <br><br>'
-	                                        + '<h3>Solicitud préstamo de salas</h3>'
-	                                        + 'Cartagena ' + usuario.fecha_act_registro + '<br>'
-	                                        + 'Sres. Cieducar' + '<br><br>'
-	                                        + 'Yo ' + usuario.nombre_usuario + ' ' + usuario.apellido_usuario + ', solicito el préstamo de un ambiente de aprendizaje <br>'
-	                                        + 'para realizar la actividad de ' + reservacion.actividad + ', que realizaré el ' + reservacion.fecha_reservacion + ' en el(los) horario(s) de: <br><br>'
-	                                        + reservacion.horario + '<br><br>'
-	                                        + 'Descripción<br>'
-	                                        + reservacion.descripcion + '<br><br>'
-	                                        + 'He declarado que acepto las condiciones, restricciones y políticas del Cieducar y la Universidad de Cartagena.'
+                                    // Enviar correo electronico                
+                                    serv.enviarMensaje(mensaje);
 
-	                        serv.enviarMensaje(mensaje);
+                                    //Notificar PUSH al usuario
+                                    serv.sendPush("Reservación realizada con éxito. Le quedan " + usuario.max_res_pend + " reservación(es) pendiente(s).", usuario.pb_token, function (){});
 
-	                        usuario.save(function(err) {
-	                            if (err) {
-	                                res.json({error : true, message : "Error actualizando la información del usuario."});
-	                            }
-	                        })
-	                        //Notificar PUSH al cliente
-	                        serv.sendPush("Reservación realizada con éxito. Le quedan " + usuario.max_res_pend + " reservación(es) pendiente(s).", usuario.pb_token, function (){});
-	                       // res.json({error:false, message:'Reservación registrada con éxito.', reservacion: reservacion});
-	                    });
-	                //  
-	                res.json({error : false, message:"Reservación registrada con exito"});
-	                });
-	            } 
+                                    usuario.save(function(err) {
+                                        if (err) {
+                                            res.json({error : true, message : "Error actualizando la información del usuario."});
+                                        }
+                                    })
 
-            })
-        } 	        
+                                    // REsponder a la peticion
+                                    res.json({error : false, message:"Reservación registrada con exito"});
+
+
+                                })
+                            }                            
+                        });
+                    }
+                } //si no existe el usuario
+                else {
+                    // REsponder a la peticion
+                    res.json({error : false, message:"Usuario no encontradO"});
+                }
+            }
     });   
 }
 
