@@ -19,7 +19,7 @@ exports.agregarActividad = function(req, res, next) {
 			return next(err);
 		}
 
-    	res.json(actividad);
+    	res.json({error: false, message : 'Actividad Agregada.', actividad : actividad});
     });
 }
 
