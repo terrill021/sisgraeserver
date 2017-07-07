@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
 router.get('/usuarios', middleware.ensureAuthorized, usuarios.obtenerUsuarios);
 
 //POST - Agregar usuarios
-router.post('/usuario', usuarios.agregarUsuario);
+router.post('/usuario', middleware.ensureAuthorized, usuarios.agregarUsuario);
 
 //PUT - Actualizar usuarios
 router.put('/usuario/:id', middleware.ensureAuthorized, usuarios.actualizarUsuario);
