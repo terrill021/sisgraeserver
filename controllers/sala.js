@@ -16,7 +16,17 @@ exports.obtenerSalas = function(req, res, next) {
 
 exports.obtenerSalasPorPropiedades = function(req, res, next) {
     var activity = JSON.parse(req.query.actividad);
-    if (req.query.capacidad < req.query.equipos) {
+
+ console.log("////////////")
+    console.log(req.query)
+console.log("////////////")
+
+    if (parseInt(req.query.capacidad) < parseInt(req.query.equipos)) {
+
+        console.log("/////****///////")
+            console.log(req.query)
+        console.log("////////////")
+
         res.send({ 
             error: true, 
             message:'El número de equipos no puede ser superior al número de personas que asisten al evento.' 

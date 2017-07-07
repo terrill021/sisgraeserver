@@ -10,7 +10,7 @@ var config = require('../settings/config');
 exports.obtenerReservaciones = function(req, res, next) {
     Reservacion.find(function(err, reservacion) {
         if (err) {
-            return next(err);
+            res.json({error : true, message : "No se pudieron recuperar las reservaciones."});
         }
         res.json(reservacion);
     })
@@ -21,9 +21,11 @@ exports.obtenerReservaciones = function(req, res, next) {
 }
 
 exports.obtenerReservacionesUsuario = function(req, res, next) {
-    Reservacion.find(function(err, reservacion) {
+
+
+    Reservacion.find({usuario : req.params.id}, function(err, reservacion) {
         if (err) {
-            return next(err);
+            res.json({error : true, message : "No se pudieron recuperar las reservaciones."});
         }
         res.json(reservacion);
     })
