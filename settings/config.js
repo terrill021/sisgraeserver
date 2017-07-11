@@ -19,42 +19,8 @@ module.exports = {
     	id:'56eecaa237d9b0aa128b456a',
     	secret:'9f2e653a0f1f518624db85e80f1b8f3d'
     },
-    'horario': [{
-    	dia: 0,//0 Domingo - 6 Sábado
-    	dian: 'Domingo',
-		indice: 0,//Almacena el indice del rango de la hora.
-		rango_hora: '0:00 - 1:00 H',
-    }, {
-    	dia: 0,//0 Domingo - 6 Sábado
-    	dian: 'Domingo',
-		indice: 1,//Almacena el indice del rango de la hora.
-		rango_hora: '1:00 - 2:00 H',
-    }, {
-    	dia: 0,//0 Domingo - 6 Sábado
-    	dian: 'Domingo',
-		indice: 2,//Almacena el indice del rango de la hora.
-		rango_hora: '2:00 - 3:00 H',
-    }, {
-    	dia: 0,//0 Domingo - 6 Sábado
-    	dian: 'Domingo',
-		indice: 3,//Almacena el indice del rango de la hora.
-		rango_hora: '3:00 - 4:00 H',
-    }, {
-    	dia: 0,//0 Domingo - 6 Sábado
-    	dian: 'Domingo',
-		indice: 4,//Almacena el indice del rango de la hora.
-		rango_hora: '4:00 - 5:00 H',
-    }, {
-    	dia: 0,//0 Domingo - 6 Sábado
-    	dian: 'Domingo',
-		indice: 5,//Almacena el indice del rango de la hora.
-		rango_hora: '5:00 - 6:00 H',
-    }, {
-    	dia: 0,//0 Domingo - 6 Sábado
-    	dian: 'Domingo',
-		indice: 6,//Almacena el indice del rango de la hora.
-		rango_hora: '6:00 - 7:00 H',
-    }, {
+    'horario': [
+     {
     	dia: 0,//0 Domingo - 6 Sábado
     	dian: 'Domingo',
 		indice: 7,//Almacena el indice del rango de la hora.
@@ -114,67 +80,7 @@ module.exports = {
     	dian: 'Domingo',
 		indice: 18,//Almacena el indice del rango de la hora.
 		rango_hora: '18:00 - 19:00 H',
-    }, {
-    	dia: 0,//0 Domingo - 6 Sábado
-    	dian: 'Domingo',
-		indice: 19,//Almacena el indice del rango de la hora.
-		rango_hora: '19:00 - 20:00 H',
-    }, {
-    	dia: 0,//0 Domingo - 6 Sábado
-    	dian: 'Domingo',
-		indice: 20,//Almacena el indice del rango de la hora.
-		rango_hora: '20:00 - 21:00 H',
-    }, {
-    	dia: 0,//0 Domingo - 6 Sábado
-    	dian: 'Domingo',
-		indice: 21,//Almacena el indice del rango de la hora.
-		rango_hora: '21:00 - 22:00 H',
-    }, {
-    	dia: 0,//0 Domingo - 6 Sábado
-    	dian: 'Domingo',
-		indice: 22,//Almacena el indice del rango de la hora.
-		rango_hora: '22:00 - 23:00 H',
-    }, {
-    	dia: 0,//0 Domingo - 6 Sábado
-    	dian: 'Domingo',
-		indice: 23,//Almacena el indice del rango de la hora.
-		rango_hora: '23:00 - 24:00 H',
-    }, {
-    	dia: 1,//0 Domingo - 6 Sábado
-    	dian: 'Lunes',
-		indice: 0,//Almacena el indice del rango de la hora.
-		rango_hora: '0:00 - 1:00 H',
-    }, {
-    	dia: 1,//0 Domingo - 6 Sábado
-    	dian: 'Lunes',
-		indice: 1,//Almacena el indice del rango de la hora.
-		rango_hora: '1:00 - 2:00 H',
-    }, {
-    	dia: 1,//0 Domingo - 6 Sábado
-    	dian: 'Lunes',
-		indice: 2,//Almacena el indice del rango de la hora.
-		rango_hora: '2:00 - 3:00 H',
-    }, {
-    	dia: 1,//0 Domingo - 6 Sábado
-    	dian: 'Lunes',
-		indice: 3,//Almacena el indice del rango de la hora.
-		rango_hora: '3:00 - 4:00 H',
-    }, {
-    	dia: 1,//0 Domingo - 6 Sábado
-    	dian: 'Lunes',
-		indice: 4,//Almacena el indice del rango de la hora.
-		rango_hora: '4:00 - 5:00 H',
-    }, {
-    	dia: 1,//0 Domingo - 6 Sábado
-    	dian: 'Lunes',
-		indice: 5,//Almacena el indice del rango de la hora.
-		rango_hora: '5:00 - 6:00 H',
-    }, {
-    	dia: 1,//0 Domingo - 6 Sábado
-    	dian: 'Lunes',
-		indice: 6,//Almacena el indice del rango de la hora.
-		rango_hora: '6:00 - 7:00 H',
-    }, {
+    },  {
     	dia: 1,//0 Domingo - 6 Sábado
     	dian: 'Lunes',
 		indice: 7,//Almacena el indice del rango de la hora.
@@ -234,66 +140,6 @@ module.exports = {
     	dian: 'Lunes',
 		indice: 18,//Almacena el indice del rango de la hora.
 		rango_hora: '18:00 - 19:00 H',
-    }, {
-    	dia: 1,//0 Domingo - 6 Sábado
-    	dian: 'Lunes',
-		indice: 19,//Almacena el indice del rango de la hora.
-		rango_hora: '19:00 - 20:00 H',
-    }, {
-    	dia: 1,//0 Domingo - 6 Sábado
-    	dian: 'Lunes',
-		indice: 20,//Almacena el indice del rango de la hora.
-		rango_hora: '20:00 - 21:00 H',
-    }, {
-    	dia: 1,//0 Domingo - 6 Sábado
-    	dian: 'Lunes',
-		indice: 21,//Almacena el indice del rango de la hora.
-		rango_hora: '21:00 - 22:00 H',
-    }, {
-    	dia: 1,//0 Domingo - 6 Sábado
-    	dian: 'Lunes',
-		indice: 22,//Almacena el indice del rango de la hora.
-		rango_hora: '22:00 - 23:00 H',
-    }, {
-    	dia: 1,//0 Domingo - 6 Sábado
-    	dian: 'Lunes',
-		indice: 23,//Almacena el indice del rango de la hora.
-		rango_hora: '23:00 - 24:00 H',
-    }, {
-    	dia: 2,//0 Domingo - 6 Sábado
-    	dian: 'Martes',
-		indice: 0,//Almacena el indice del rango de la hora.
-		rango_hora: '0:00 - 1:00 H',
-    }, {
-    	dia: 2,//0 Domingo - 6 Sábado
-    	dian: 'Martes',
-		indice: 1,//Almacena el indice del rango de la hora.
-		rango_hora: '1:00 - 2:00 H',
-    }, {
-    	dia: 2,//0 Domingo - 6 Sábado
-    	dian: 'Martes',
-		indice: 2,//Almacena el indice del rango de la hora.
-		rango_hora: '2:00 - 3:00 H',
-    }, {
-    	dia: 2,//0 Domingo - 6 Sábado
-    	dian: 'Martes',
-		indice: 3,//Almacena el indice del rango de la hora.
-		rango_hora: '3:00 - 4:00 H',
-    }, {
-    	dia: 2,//0 Domingo - 6 Sábado
-    	dian: 'Martes',
-		indice: 4,//Almacena el indice del rango de la hora.
-		rango_hora: '4:00 - 5:00 H',
-    }, {
-    	dia: 2,//0 Domingo - 6 Sábado
-    	dian: 'Martes',
-		indice: 5,//Almacena el indice del rango de la hora.
-		rango_hora: '5:00 - 6:00 H',
-    }, {
-    	dia: 2,//0 Domingo - 6 Sábado
-    	dian: 'Martes',
-		indice: 6,//Almacena el indice del rango de la hora.
-		rango_hora: '6:00 - 7:00 H',
     }, {
     	dia: 2,//0 Domingo - 6 Sábado
     	dian: 'Martes',
@@ -355,66 +201,6 @@ module.exports = {
 		indice: 18,//Almacena el indice del rango de la hora.
 		rango_hora: '18:00 - 19:00 H',
     }, {
-    	dia: 2,//0 Domingo - 6 Sábado
-    	dian: 'Martes',
-		indice: 19,//Almacena el indice del rango de la hora.
-		rango_hora: '19:00 - 20:00 H',
-    }, {
-    	dia: 2,//0 Domingo - 6 Sábado
-    	dian: 'Martes',
-		indice: 20,//Almacena el indice del rango de la hora.
-		rango_hora: '20:00 - 21:00 H',
-    }, {
-    	dia: 2,//0 Domingo - 6 Sábado
-    	dian: 'Martes',
-		indice: 21,//Almacena el indice del rango de la hora.
-		rango_hora: '21:00 - 22:00 H',
-    }, {
-    	dia: 2,//0 Domingo - 6 Sábado
-    	dian: 'Martes',
-		indice: 22,//Almacena el indice del rango de la hora.
-		rango_hora: '22:00 - 23:00 H',
-    }, {
-    	dia: 2,//0 Domingo - 6 Sábado
-    	dian: 'Martes',
-		indice: 23,//Almacena el indice del rango de la hora.
-		rango_hora: '23:00 - 24:00 H',
-    }, {
-    	dia: 3,//0 Domingo - 6 Sábado
-    	dian: 'Miércoles',
-		indice: 0,//Almacena el indice del rango de la hora.
-		rango_hora: '0:00 - 1:00 H',
-    }, {
-    	dia: 3,//0 Domingo - 6 Sábado
-    	dian: 'Miércoles',
-		indice: 1,//Almacena el indice del rango de la hora.
-		rango_hora: '1:00 - 2:00 H',
-    }, {
-    	dia: 3,//0 Domingo - 6 Sábado
-    	dian: 'Miércoles',
-		indice: 2,//Almacena el indice del rango de la hora.
-		rango_hora: '2:00 - 3:00 H',
-    }, {
-    	dia: 3,//0 Domingo - 6 Sábado
-    	dian: 'Miércoles',
-		indice: 3,//Almacena el indice del rango de la hora.
-		rango_hora: '3:00 - 4:00 H',
-    }, {
-    	dia: 3,//0 Domingo - 6 Sábado
-    	dian: 'Miércoles',
-		indice: 4,//Almacena el indice del rango de la hora.
-		rango_hora: '4:00 - 5:00 H',
-    }, {
-    	dia: 3,//0 Domingo - 6 Sábado
-    	dian: 'Miércoles',
-		indice: 5,//Almacena el indice del rango de la hora.
-		rango_hora: '5:00 - 6:00 H',
-    }, {
-    	dia: 3,//0 Domingo - 6 Sábado
-    	dian: 'Miércoles',
-		indice: 6,//Almacena el indice del rango de la hora.
-		rango_hora: '6:00 - 7:00 H',
-    }, {
     	dia: 3,//0 Domingo - 6 Sábado
     	dian: 'Miércoles',
 		indice: 7,//Almacena el indice del rango de la hora.
@@ -474,66 +260,6 @@ module.exports = {
     	dian: 'Miércoles',
 		indice: 18,//Almacena el indice del rango de la hora.
 		rango_hora: '18:00 - 19:00 H',
-    }, {
-    	dia: 3,//0 Domingo - 6 Sábado
-    	dian: 'Miércoles',
-		indice: 19,//Almacena el indice del rango de la hora.
-		rango_hora: '19:00 - 20:00 H',
-    }, {
-    	dia: 3,//0 Domingo - 6 Sábado
-    	dian: 'Miércoles',
-		indice: 20,//Almacena el indice del rango de la hora.
-		rango_hora: '20:00 - 21:00 H',
-    }, {
-    	dia: 3,//0 Domingo - 6 Sábado
-    	dian: 'Miércoles',
-		indice: 21,//Almacena el indice del rango de la hora.
-		rango_hora: '21:00 - 22:00 H',
-    }, {
-    	dia: 3,//0 Domingo - 6 Sábado
-    	dian: 'Miércoles',
-		indice: 22,//Almacena el indice del rango de la hora.
-		rango_hora: '22:00 - 23:00 H',
-    }, {
-    	dia: 3,//0 Domingo - 6 Sábado
-    	dian: 'Miércoles',
-		indice: 23,//Almacena el indice del rango de la hora.
-		rango_hora: '23:00 - 24:00 H',
-    }, {
-    	dia: 4,//0 Domingo - 6 Sábado
-    	dian: 'Jueves',
-		indice: 0,//Almacena el indice del rango de la hora.
-		rango_hora: '0:00 - 1:00 H',
-    }, {
-    	dia: 4,//0 Domingo - 6 Sábado
-    	dian: 'Jueves',
-		indice: 1,//Almacena el indice del rango de la hora.
-		rango_hora: '1:00 - 2:00 H',
-    }, {
-    	dia: 4,//0 Domingo - 6 Sábado
-    	dian: 'Jueves',
-		indice: 2,//Almacena el indice del rango de la hora.
-		rango_hora: '2:00 - 3:00 H',
-    }, {
-    	dia: 4,//0 Domingo - 6 Sábado
-    	dian: 'Jueves',
-		indice: 3,//Almacena el indice del rango de la hora.
-		rango_hora: '3:00 - 4:00 H',
-    }, {
-    	dia: 4,//0 Domingo - 6 Sábado
-    	dian: 'Jueves',
-		indice: 4,//Almacena el indice del rango de la hora.
-		rango_hora: '4:00 - 5:00 H',
-    }, {
-    	dia: 4,//0 Domingo - 6 Sábado
-    	dian: 'Jueves',
-		indice: 5,//Almacena el indice del rango de la hora.
-		rango_hora: '5:00 - 6:00 H',
-    }, {
-    	dia: 4,//0 Domingo - 6 Sábado
-    	dian: 'Jueves',
-		indice: 6,//Almacena el indice del rango de la hora.
-		rango_hora: '6:00 - 7:00 H',
     }, {
     	dia: 4,//0 Domingo - 6 Sábado
     	dian: 'Jueves',
@@ -595,66 +321,6 @@ module.exports = {
 		indice: 18,//Almacena el indice del rango de la hora.
 		rango_hora: '18:00 - 19:00 H',
     }, {
-    	dia: 4,//0 Domingo - 6 Sábado
-    	dian: 'Jueves',
-		indice: 19,//Almacena el indice del rango de la hora.
-		rango_hora: '19:00 - 20:00 H',
-    }, {
-    	dia: 4,//0 Domingo - 6 Sábado
-    	dian: 'Jueves',
-		indice: 20,//Almacena el indice del rango de la hora.
-		rango_hora: '20:00 - 21:00 H',
-    }, {
-    	dia: 4,//0 Domingo - 6 Sábado
-    	dian: 'Jueves',
-		indice: 21,//Almacena el indice del rango de la hora.
-		rango_hora: '21:00 - 22:00 H',
-    }, {
-    	dia: 4,//0 Domingo - 6 Sábado
-    	dian: 'Jueves',
-		indice: 22,//Almacena el indice del rango de la hora.
-		rango_hora: '22:00 - 23:00 H',
-    }, {
-    	dia: 4,//0 Domingo - 6 Sábado
-    	dian: 'Jueves',
-		indice: 23,//Almacena el indice del rango de la hora.
-		rango_hora: '23:00 - 24:00 H',
-    }, {
-    	dia: 5,//0 Domingo - 6 Sábado
-    	dian: 'Viernes',
-		indice: 0,//Almacena el indice del rango de la hora.
-		rango_hora: '0:00 - 1:00 H',
-    }, {
-    	dia: 5,//0 Domingo - 6 Sábado
-    	dian: 'Viernes',
-		indice: 1,//Almacena el indice del rango de la hora.
-		rango_hora: '1:00 - 2:00 H',
-    }, {
-    	dia: 5,//0 Domingo - 6 Sábado
-    	dian: 'Viernes',
-		indice: 2,//Almacena el indice del rango de la hora.
-		rango_hora: '2:00 - 3:00 H',
-    }, {
-    	dia: 5,//0 Domingo - 6 Sábado
-    	dian: 'Viernes',
-		indice: 3,//Almacena el indice del rango de la hora.
-		rango_hora: '3:00 - 4:00 H',
-    }, {
-    	dia: 5,//0 Domingo - 6 Sábado
-    	dian: 'Viernes',
-		indice: 4,//Almacena el indice del rango de la hora.
-		rango_hora: '4:00 - 5:00 H',
-    }, {
-    	dia: 5,//0 Domingo - 6 Sábado
-    	dian: 'Viernes',
-		indice: 5,//Almacena el indice del rango de la hora.
-		rango_hora: '5:00 - 6:00 H',
-    }, {
-    	dia: 5,//0 Domingo - 6 Sábado
-    	dian: 'Viernes',
-		indice: 6,//Almacena el indice del rango de la hora.
-		rango_hora: '6:00 - 7:00 H',
-    }, {
     	dia: 5,//0 Domingo - 6 Sábado
     	dian: 'Viernes',
 		indice: 7,//Almacena el indice del rango de la hora.
@@ -715,66 +381,6 @@ module.exports = {
 		indice: 18,//Almacena el indice del rango de la hora.
 		rango_hora: '18:00 - 19:00 H',
     }, {
-    	dia: 5,//0 Domingo - 6 Sábado
-    	dian: 'Viernes',
-		indice: 19,//Almacena el indice del rango de la hora.
-		rango_hora: '19:00 - 20:00 H',
-    }, {
-    	dia: 5,//0 Domingo - 6 Sábado
-    	dian: 'Viernes',
-		indice: 20,//Almacena el indice del rango de la hora.
-		rango_hora: '20:00 - 21:00 H',
-    }, {
-    	dia: 5,//0 Domingo - 6 Sábado
-    	dian: 'Viernes',
-		indice: 21,//Almacena el indice del rango de la hora.
-		rango_hora: '21:00 - 22:00 H',
-    }, {
-    	dia: 5,//0 Domingo - 6 Sábado
-    	dian: 'Viernes',
-		indice: 22,//Almacena el indice del rango de la hora.
-		rango_hora: '22:00 - 23:00 H',
-    }, {
-    	dia: 5,//0 Domingo - 6 Sábado
-    	dian: 'Viernes',
-		indice: 23,//Almacena el indice del rango de la hora.
-		rango_hora: '23:00 - 24:00 H',
-    }, {
-    	dia: 6,//0 Domingo - 6 Sábado
-    	dian: 'Sábado',
-		indice: 0,//Almacena el indice del rango de la hora.
-		rango_hora: '0:00 - 1:00 H',
-    }, {
-    	dia: 6,//0 Domingo - 6 Sábado
-    	dian: 'Sábado',
-		indice: 1,//Almacena el indice del rango de la hora.
-		rango_hora: '1:00 - 2:00 H',
-    }, {
-    	dia: 6,//0 Domingo - 6 Sábado
-    	dian: 'Sábado',
-		indice: 2,//Almacena el indice del rango de la hora.
-		rango_hora: '2:00 - 3:00 H',
-    }, {
-    	dia: 6,//0 Domingo - 6 Sábado
-    	dian: 'Sábado',
-		indice: 3,//Almacena el indice del rango de la hora.
-		rango_hora: '3:00 - 4:00 H',
-    }, {
-    	dia: 6,//0 Domingo - 6 Sábado
-    	dian: 'Sábado',
-		indice: 4,//Almacena el indice del rango de la hora.
-		rango_hora: '4:00 - 5:00 H',
-    }, {
-    	dia: 6,//0 Domingo - 6 Sábado
-    	dian: 'Sábado',
-		indice: 5,//Almacena el indice del rango de la hora.
-		rango_hora: '5:00 - 6:00 H',
-    }, {
-    	dia: 6,//0 Domingo - 6 Sábado
-    	dian: 'Sábado',
-		indice: 6,//Almacena el indice del rango de la hora.
-		rango_hora: '6:00 - 7:00 H',
-    }, {
     	dia: 6,//0 Domingo - 6 Sábado
     	dian: 'Sábado',
 		indice: 7,//Almacena el indice del rango de la hora.
@@ -834,31 +440,6 @@ module.exports = {
     	dian: 'Sábado',
 		indice: 18,//Almacena el indice del rango de la hora.
 		rango_hora: '18:00 - 19:00 H',
-    }, {
-    	dia: 6,//0 Domingo - 6 Sábado
-    	dian: 'Sábado',
-		indice: 19,//Almacena el indice del rango de la hora.
-		rango_hora: '19:00 - 20:00 H',
-    }, {
-    	dia: 6,//0 Domingo - 6 Sábado
-    	dian: 'Sábado',
-		indice: 20,//Almacena el indice del rango de la hora.
-		rango_hora: '20:00 - 21:00 H',
-    }, {
-    	dia: 6,//0 Domingo - 6 Sábado
-    	dian: 'Sábado',
-		indice: 21,//Almacena el indice del rango de la hora.
-		rango_hora: '21:00 - 22:00 H',
-    }, {
-    	dia: 6,//0 Domingo - 6 Sábado
-    	dian: 'Sábado',
-		indice: 22,//Almacena el indice del rango de la hora.
-		rango_hora: '22:00 - 23:00 H',
-    }, {
-    	dia: 6,//0 Domingo - 6 Sábado
-    	dian: 'Sábado',
-		indice: 23,//Almacena el indice del rango de la hora.
-		rango_hora: '23:00 - 24:00 H',
     }
     ]
 };

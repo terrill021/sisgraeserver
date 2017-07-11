@@ -17,15 +17,8 @@ exports.obtenerSalas = function(req, res, next) {
 exports.obtenerSalasPorPropiedades = function(req, res, next) {
     var activity = JSON.parse(req.query.actividad);
 
- console.log("////////////")
-    console.log(req.query)
-console.log("////////////")
-
     if (parseInt(req.query.capacidad) < parseInt(req.query.equipos)) {
 
-        console.log("/////****///////")
-            console.log(req.query)
-        console.log("////////////")
 
         res.send({ 
             error: true, 
@@ -91,10 +84,10 @@ exports.actualizarSala = function(req, res) {
 
         sala.save(function(err) {
             if (err) {
-                res.send(err);
+                res.json({error : true, message : "Error al intentar modificar la sala."});
             }
             
-            res.json(sala);
+            res.json({error : false, message : "Sala modificada.", sala : sala});
         });
     })
 }
