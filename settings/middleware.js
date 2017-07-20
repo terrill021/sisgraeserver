@@ -4,8 +4,6 @@ var config = require('./config');
 // Middleware para validar el token
 exports.ensureAuthorized = function (req, res, next) {
 
-    console.log('ensureAuthorized');
-
     // obtener token por get, post o como header
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
@@ -25,9 +23,6 @@ exports.ensureAuthorized = function (req, res, next) {
 
 // Middleware para validar el token
 exports.validatePassToken = function (req, res, next) {
-
-    console.log('validatePassToken');
-
     // obtener token por get, post o como header
     var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.params.token;
 
@@ -46,8 +41,8 @@ exports.validatePassToken = function (req, res, next) {
 };
 
 exports.dominiosCruzados = function(req, res, next) {
-    
-    console.log('dominiosCruzados');
+
+
 
     var responseSettings = {
         "AccessControlAllowOrigin": req.headers.origin,
