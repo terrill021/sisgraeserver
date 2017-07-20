@@ -30,6 +30,7 @@ var horario = require('./routes/horario');
 var sala = require('./routes/sala');
 var reserva = require('./routes/reservacion');
 var sancion = require('./routes/sancion');
+var cors = require('cors');
 
 var app = express();
 
@@ -49,7 +50,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Dominios Cruzados
-app.all('*', middleware.dominiosCruzados);
+app.use(cors());
 
 //Generar Rutas
 app.use('/', routes);
