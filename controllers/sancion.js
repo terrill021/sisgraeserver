@@ -28,28 +28,35 @@ exports.obtenerSancionesPorUsuario = function(req, res, next) {
 }
 
 exports.agregarSancion = function(req, res, next) {
+
+    console.log("exports.agregarSancion")
+
     var sancion = new Sancion(req.body);
     var mensaje = {};
 
+    //Guardar la sanción
     sancion.save(function(err, sancion) {
 		if (err) {
-			return next(err);
+			return res.json({error: true, message: "Error al registrar la sanción."});
 		}
 
+        //Buscar al usuario para sancionarlo
         Usuario.findById(req.body.sancionado, function(err, usuario) {
 
             usuario.fecha_act_registro = new Date();
 
             if (usuario.max_reservaciones > 0)  {
+                //Restar una reservación
                 usuario.max_reservaciones--;
-                usuario.max_res_pend--;
             }
 
+            //Guardar usuario.
             usuario.save(function(err) {
                 if (err) {
-                    res.send(err);
+                    res.json({error: true, message:"Error registrando sanción a usuario."});
                 }
 
+                //Notificar por correo
                 mensaje.tipo = 'registrarSancion';
                 mensaje.nombre = usuario.nombre_usuario;
                 mensaje.apellido = usuario.apellido_usuario;
