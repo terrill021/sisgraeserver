@@ -49,12 +49,15 @@ exports.obtenerHorariosDisponibles = function(req, res, next) {
             res.json({error: false, message: 'Error iterno.', horario: horario_l});
         }
 
-        if (reservacion.length > 0) {
+        else if (reservacion.length > 0) {
         	horario_v = reservacion[0].sala.horario;
         	horario_l = [];
 
         	for (var i = 0; i < reservacion.length; i++) { //Recorrer reservaciones
-				for (var j = 0; j < reservacion[i].horario.length; j++) { //Recorrer los índices de los horarios reservados        		
+				if (reservacion[i].estado == "Cancelada") {
+                    continue;
+                }
+                for (var j = 0; j < reservacion[i].horario.length; j++) { //Recorrer los índices de los horarios reservados        		
         			for (var k = 0; k < horario_v.length; k++) { //Recorrer horarios válidos        			
 	        			if (dia == horario_v[k].dia && reservacion[i].horario[j].indice == horario_v[k].indice) {
 	        				horario_v[k].estado = false;
