@@ -125,7 +125,7 @@ exports.agregarReservacion = function (req, res, next) {
                 if(usuario){
                     //Si no le quedan reservaciones        
                     if (usuario.max_res_pend == usuario.max_reservaciones) {
-                        res.json({error : true, message : "As alcanzado el numero máximo de reservaciones que puedes realizar."})
+                        res.json({error : true, message : "Has alcanzado el numero máximo de reservaciones que puedes realizar."})
                     }
                     // Si le quedan reservaciones
                     else {
