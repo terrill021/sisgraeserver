@@ -116,6 +116,7 @@ exports.obtenerHorariosDisponibles = function(req, res, next) {
 exports.agregarReservacion = function (req, res, next) {
 	
         var usuario;
+
 		Usuario.findById({_id : req.body.usuario}, function(err, usuarioFound) {
 	        if(err){
 	            res.json({error : true, message : "Error buscando usuario."});
@@ -124,7 +125,7 @@ exports.agregarReservacion = function (req, res, next) {
                 //si el usuario existe
                 if(usuario){
                     //Si no le quedan reservaciones        
-                    if (usuario.max_res_pend == usuario.max_reservaciones) {
+                    if (usuario.max_res_pend >= usuario.max_reservaciones) {
                         res.json({error : true, message : "Has alcanzado el numero máximo de reservaciones que puedes realizar."})
                     }
                     // Si le quedan reservaciones
@@ -269,9 +270,11 @@ exports.actualizarEstado = function(req, res, next) {
                     usuario.fecha_act_registro = new Date();
             
                     //Se le quita una reservacion
-                    usuario.max_reservaciones--;
-
-                    //Se le cancela para que pueda hacer otra
+                    if (usuario.max_reservaciones > 0) {
+                        usuario.max_reservaciones--;    
+                    }
+                    
+                    //Se le resta una reservación activa
                     if (usuario.max_res_pend > 0) {
                         usuario.max_res_pend --;
                     }
