@@ -8,7 +8,7 @@ var serv = require('../settings/service');
 var config = require('../settings/config');
 
 exports.obtenerReservaciones = function(req, res, next) {
-    Reservacion.find(function(err, reservacion) {
+    Reservacion.find({}, null, {sort: {fecha_reservacion: -1}}, function(err, reservacion) {
         if (err) {
             res.json({error : true, message : "No se pudieron recuperar las reservaciones."});
         }
