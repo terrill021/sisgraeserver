@@ -250,7 +250,6 @@ exports.actualizarReservacion = function(req, res) {
 
 exports.actualizarEstado = function(req, res, next) {
 
-
     var mensaje = {};
 
     Reservacion.findById(req.params.id, function(err, reservacion) {
@@ -266,6 +265,8 @@ exports.actualizarEstado = function(req, res, next) {
 
             //Si la reservación es incunplida
             if (reservacion.estado == 'Incumplida') {
+
+
                 Usuario.findById(reservacion.usuario, function(err, usuario) { 
                     usuario.fecha_act_registro = new Date();
             
@@ -319,7 +320,8 @@ exports.actualizarEstado = function(req, res, next) {
                         serv.enviarMensaje(mensaje);
                     })
                 });
-            } else if (reservacion.estado == 'Cumplida' || reservacion.estado == 'Cancelada') {
+            } else if (reservacion.estado == 'Realizada' || reservacion.estado == 'Cancelada') {
+                
                 Usuario.findById(reservacion.usuario, function(err, usuario) { 
                     usuario.fecha_act_registro = new Date();
                    
