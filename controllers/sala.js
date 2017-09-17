@@ -18,8 +18,6 @@ exports.obtenerSalasPorPropiedades = function(req, res, next) {
     var activity = JSON.parse(req.query.actividad);
 
     if (parseInt(req.query.capacidad) < parseInt(req.query.equipos)) {
-
-
         res.send({ 
             error: true, 
             message:'El número de equipos no puede ser superior al número de personas que asisten al evento.' 
@@ -32,7 +30,7 @@ exports.obtenerSalasPorPropiedades = function(req, res, next) {
             estado: 'true'
         };
         
-        Sala.find(search, function(err, sala) {
+        Sala.find(search, null, {sort: {capacidad: 1, num_pcs: 1}}, function(err, sala) {
             if (err) {
                 return next(err);
             }
