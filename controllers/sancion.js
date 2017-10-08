@@ -69,11 +69,11 @@ exports.agregarSancion = function(req, res, next) {
                 if (usuario.max_reservaciones == 0) {
                     mensaje.cuerpo += 'De ahora en adelante no podrá realizar reservaciones durante 15 días hábiles y deberá <br>estar al día con los entregables.';
                     //Notificar PUSH al cliente
-                    serv.sendPush("Usted ha sido sancionado durante 15 días hábiles. Revisar las políticas del Cieducar.", req.client.pushToken, () => {});
+                    serv.sendPush("Usted ha sido sancionado durante 15 días hábiles. Revisar las políticas del Cieducar.", usuario.pb_token, () => {});
                 } else {
                     mensaje.cuerpo += 'De ahora en adelante solo podrá realizar máximo ' + usuario.max_reservaciones + ' reservación(es).';
                     //Notificar PUSH al cliente
-                    serv.sendPush("Solo podrá realizar máximo " + usuario.max_reservaciones + " reservación(es).", req.client.pushToken, () => {});
+                    serv.sendPush("Solo podrá realizar máximo " + usuario.max_reservaciones + " reservación(es).", usuario.pb_token, () => {});
                 }
 
                 serv.enviarMensaje(mensaje);
